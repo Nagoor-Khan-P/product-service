@@ -23,6 +23,14 @@ public class ProductService {
     }
 
     public List<ProductVO> fetchAllProducts() {
-        return productRepository.findAll();
+        List<ProductVO> products = productRepository.findAll();
+        log.info("All products are fetched successfully {}", products);
+        return products;
+    }
+
+    public ProductVO fetchProduct(String productId) {
+        ProductVO productVO = productRepository.findById(productId).orElse(null);
+        log.info("Product is fetched successfully for the given product id {}", productId);
+        return productVO;
     }
 }

@@ -39,4 +39,9 @@ public class ProductController {
         List<ProductVO> products = productService.fetchAllProducts();
         return products.stream().map(productResponseMapper::productVOTOProductResponseVO).collect(Collectors.toList());
     }
+
+    @GetMapping("/{productId}")
+    public ProductResponseVO fetchProduct(@PathVariable("productId") String productId) {
+        return productResponseMapper.productVOTOProductResponseVO(productService.fetchProduct(productId));
+    }
 }
