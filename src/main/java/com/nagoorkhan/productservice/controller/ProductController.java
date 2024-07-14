@@ -8,6 +8,7 @@ import com.nagoorkhan.productservice.model.response.ProductResponseVO;
 import com.nagoorkhan.productservice.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,22 +27,32 @@ public class ProductController {
 
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public ProductResponseVO createProduct(@RequestBody ProductRequestVO productRequestVO) {
+    public ResponseEntity<ProductResponseVO> createProduct(@RequestBody ProductRequestVO productRequestVO) {
         ProductVO productVO = productRequestMapper.productRequestVOTOProductVO(productRequestVO);
-        return productResponseMapper.productVOTOProductResponseVO(productService.createProduct(productVO));
+        return ResponseEntity.ok(productResponseMapper.productVOTOProductResponseVO(productService.createProduct(productVO)));
 
     }
 
     @GetMapping
-    @ResponseStatus(HttpStatus.OK)
-    public List<ProductResponseVO> fetchAllProducts() {
+    public ResponseEntity<List<ProductResponseVO>> fetchAllProducts() {
         List<ProductVO> products = productService.fetchAllProducts();
-        return products.stream().map(productResponseMapper::productVOTOProductResponseVO).collect(Collectors.toList());
+        return ResponseEntity.ok(products.stream().map(productResponseMapper::productVOTOProductResponseVO).collect(Collectors.toList()));
     }
 
     @GetMapping("/{productId}")
-    public ProductResponseVO fetchProduct(@PathVariable("productId") String productId) {
-        return productResponseMapper.productVOTOProductResponseVO(productService.fetchProduct(productId));
+    public ResponseEntity<ProductResponseVO> fetchProduct(@PathVariable("productId") String productId) {
+        return ResponseEntity.ok(productResponseMapper.productVOTOProductResponseVO(productService.fetchProduct(productId)));
+    }
+
+    @PutMapping("/{productId}")
+    public ResponseEntity<ProductResponseVO> modifyProduct(@PathVariable("productId") String productId, @RequestBody ProductRequestVO productRequestVO) {
+        ProductVO productVO = productRequestMapper.productRequestVOTOProductVO(productRequestVO);
+        productVO.setPid(productId);
+        return ResponseEntity.ok(productResponseMapper.productVOTOProductResponseVO(productService.modifyProduct(productVO)));
+    }
+
+    @DeleteMapping("/{productId}")
+    public void deleteProduct(@PathVariable("productId") String productId) {
+        productService.deleteProduct(productId);
     }
 }

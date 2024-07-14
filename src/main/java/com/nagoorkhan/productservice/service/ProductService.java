@@ -17,7 +17,7 @@ public class ProductService {
     private final ProductRepository productRepository;
 
     public ProductVO createProduct(ProductVO productVO) {
-        productVO = productRepository.save(productVO);
+        productVO = productRepository.insert(productVO);
         log.info("Product is created successfully with id {}", productVO.getPid());
         return productVO;
     }
@@ -32,5 +32,16 @@ public class ProductService {
         ProductVO productVO = productRepository.findById(productId).orElse(null);
         log.info("Product is fetched successfully for the given product id {}", productId);
         return productVO;
+    }
+
+    public ProductVO modifyProduct(ProductVO productVO) {
+        productVO = productRepository.save(productVO);
+        log.info("Product is updated  successfully {}", productVO);
+        return productVO;
+    }
+
+    public void deleteProduct(String productId) {
+        productRepository.deleteById(productId);
+        log.info("Product is deleted  successfully {}", productId);
     }
 }
