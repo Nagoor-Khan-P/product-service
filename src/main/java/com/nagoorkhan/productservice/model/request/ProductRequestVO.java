@@ -2,6 +2,8 @@ package com.nagoorkhan.productservice.model.request;
 
 import lombok.*;
 
+import java.math.BigDecimal;
+
 @Getter
 @Setter
 @Data
@@ -9,7 +11,7 @@ import lombok.*;
 @NoArgsConstructor
 public class ProductRequestVO {
     private String productName;
-    private Long price;
+    private BigDecimal price;
     private String description;
 
 }
