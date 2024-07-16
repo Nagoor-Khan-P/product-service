@@ -2,9 +2,9 @@ package com.nagoorkhan.productservice.validator;
 
 import com.nagoorkhan.productservice.exceptionhandler.ProductExceptionHandler;
 import com.nagoorkhan.productservice.model.business.ProductVO;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service
 public class ProductValidator {
 
     public void validateProductId(String productId) {

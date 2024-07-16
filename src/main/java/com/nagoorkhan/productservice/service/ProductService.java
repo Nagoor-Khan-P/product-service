@@ -1,5 +1,6 @@
 package com.nagoorkhan.productservice.service;
 
+import com.nagoorkhan.productservice.exceptionhandler.ProductExceptionHandler;
 import com.nagoorkhan.productservice.model.business.ProductVO;
 import com.nagoorkhan.productservice.repository.ProductRepository;
 import com.nagoorkhan.productservice.validator.ProductValidator;
@@ -33,6 +34,9 @@ public class ProductService {
     public ProductVO fetchProduct(String productId) {
         productValidator.validateProductId(productId);
         ProductVO productVO = productRepository.findById(productId).orElse(null);
+        if(productVO == null) {
+            throw new ProductExceptionHandler("Product is not available in the inventory");
+        }
         log.info("Product is fetched successfully for the given product id {}", productId);
         return productVO;
     }
