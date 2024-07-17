@@ -11,6 +11,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -42,6 +43,14 @@ public class ProductServiceTest {
     }
 
     @Test
+    void testFetchAllProducts() {
+        when(productRepository.findAll()).thenReturn(List.of(createProductVO()));
+        List<ProductVO> productVOs = productService.fetchAllProducts();
+
+        assertEquals(1, productVOs.size());
+    }
+
+    @Test
     void testFetchProduct() {
         when(productRepository.findById(anyString())).thenReturn(Optional.of(createProductVO()));
         doNothing().when(productValidator).validateProductId(any());
@@ -62,6 +71,23 @@ public class ProductServiceTest {
             productService.fetchProduct("1");
         });
     }
+
+    @Test
+    void testModifyProduct() {
+        ProductVO productVO = createProductVO();
+        productVO.setProductName("Modified Product Name");
+        when(productRepository.save(any(ProductVO.class))).thenReturn(productVO);
+//        doNothing().when(productValidator).validateProductId(any());
+
+        productVO = productService.modifyProduct(createProductVO());
+
+        assertEquals("1", productVO.getPid());
+        assertEquals("Modified Product Name", productVO.getProductName());
+        assertEquals(price, productVO.getPrice());
+        assertEquals("Apple Macbook M3", productVO.getDescription());
+    }
+
+
 
     private ProductVO createProductVO() {
         return new ProductVO("1", "Laptop", price, "Apple Macbook M3");
